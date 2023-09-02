@@ -2,7 +2,8 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider = "prisma-client-js"
+  provider   = "prisma-client-js"
+  engineType = "binary"
 }
 
 datasource db {
@@ -11,20 +12,56 @@ datasource db {
 }
 
 model User {
-  id       String @id @default(uuid())
-  username String @unique
-  phone    String @unique
-  email    String @unique
-  password String
-
+  id               String    @id @default(uuid())
+  username         String    @unique
+  phone            String    @unique
+  email            String    @unique
+  password         String
+  payments         Payment[]
   createdAt        DateTime  @default(now())
   updatedAt        DateTime  @updatedAt
   isAdmin          Boolean   @default(false)
+  Token            Token[]
+  Post             Post[]
   verificationCode Int?
   isVerified       Boolean   @default(false)
   resetToken       String?
   resetTokenExpiry DateTime?
-  Token            Token[]
+}
+
+model Farmer {
+  id        String   @id @default(uuid())
+  username  String   @unique
+  phone     String   @unique
+  email     String   @unique
+  password  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Payment {
+  id                 String    @id @default(uuid())
+  packageName        String    @db.VarChar(255)
+  belogsToId         String?
+  belongsTo          User?     @relation(fields: [belogsToId], references: [id])
+  amount             Int?
+  expiresAt          DateTime?
+  subscribedAt       DateTime  @default(now())
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime? @updatedAt
+  Package            Package?  @relation(fields: [packageId], references: [id])
+  packageId          String?
+  stripeClientSecret String?
+}
+
+model Package {
+  id         String    @id @default(uuid())
+  name       String?   @unique
+  price      Int?
+  timePeriod Int?
+  payments   Payment[]
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime? @updatedAt
 }
 
 model Token {
@@ -35,13 +72,31 @@ model Token {
   userId String?
 }
 
-
-model Farmer {
+model Post {
   id        String   @id @default(uuid())
-  username  String   @unique
-  phone     String   @unique
-  email     String   @unique
-  password  String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  title     String?
+  published Boolean? @default(true)
+  authorId  String
+  author    User     @relation(fields: [authorId], references: [id])
+}
+
+model Posts {
+  id        String   @id @default(uuid())
+  title     String?
+  published Boolean? @default(true)
+  // authorId  String
+  // author    User     @relation(fields: [authorId], references: [id])
+}
+
+model Input {
+  id          String  @id @default(uuid())
+  n           Float?
+  p           Float?
+  k           Float?
+  ph          Float?
+  rainfall    Float?
+  wind        Float?
+  temperature Float?
+  humidity    Float?
+  crop        String?
 }
