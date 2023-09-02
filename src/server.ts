@@ -25,7 +25,6 @@ app.get('/', (req, res) => {
     res.json({message:'hellooo'})
 })
 
-// app.use('/api',protect, router)
 
 
 app.use('/api',protectRoute, router)
@@ -41,35 +40,6 @@ app.post('/password-changer', forgotPasswordChanger)
 
 
 app.get('/refresh-token',refreshToken)
-
-//access token 3 day expiry day
-//refresh token token
-//forget ,validation ,error handling(string),
-//frget passoword &  reset password 
-//authorization access(expired date 2day ) and refresh(expirey day 1 week ) token with expory date 
-
-
-//payment verification 
-//2 users 1 admin
-
-//both admin and user can access packe list 
-//admn can package CRUD
-//clinets can access pacages only get method 
-
-//payment CRUD
-//user should know what kind of package 
-
-//when payment
-
-//sign 
-
-//res. username ,token ,email,phone in json 
-//using users 
-
-//check payment => user.id payed 
-//last payment =>
-
-
 
 
 export default app

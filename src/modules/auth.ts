@@ -50,7 +50,6 @@ export const protect = (req, res, next) => {
 
 //to protect the routes 
 export const protectRoute = (req, res, next) => {
-    // const token = req.headers.authorization.split(' ')[1]
     try {
        const token = req.header('Authorization').replace('Bearer ', '');
   if (!token) {
